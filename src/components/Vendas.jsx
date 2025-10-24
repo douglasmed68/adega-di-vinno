@@ -188,6 +188,20 @@ const Vendas = () => {
                         <DropdownMenuItem onClick={() => handleViewPedido(venda)}>
                           <Eye className="mr-2 h-4 w-4" /> Visualizar
                         </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuLabel>Atualizar Status</DropdownMenuLabel>
+                        <DropdownMenuItem onClick={() => handleUpdateStatus(venda.id, 'pago')}>
+                          <CheckCircle className="mr-2 h-4 w-4" /> Marcar como Pago
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleUpdateStatus(venda.id, 'enviado')}>
+                          <Truck className="mr-2 h-4 w-4" /> Marcar como Enviado
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleUpdateStatus(venda.id, 'entregue')}>
+                          <Package className="mr-2 h-4 w-4" /> Marcar como Entregue
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleUpdateStatus(venda.id, 'cancelado')} className="text-red-600">
+                          <AlertTriangle className="mr-2 h-4 w-4" /> Cancelar Venda
+                        </DropdownMenuItem>
                         {/* Adicionar mais ações como imprimir, etc */}
                       </DropdownMenuContent>
                     </DropdownMenu>
