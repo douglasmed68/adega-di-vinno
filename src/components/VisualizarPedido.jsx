@@ -53,10 +53,8 @@ const VisualizarPedido = ({ isOpen, onClose, pedido }) => {
   }
 
   // Calcular total do pedido
-  const calcularTotal = () => {
-    return pedido.itens.reduce((total, item) => total + (item.quantidade * item.precoUnitario), 0)
-  }
-
+  const calcularTotal = ()     const itens = pedido.itens || [];
+    const subtotal = itens.reduce((total, item) => total + (item.quantidade * item.precoUnitario), 0)
   // Obter status do pedido com cor
   const getStatusBadge = () => {
     const statusMap = {
@@ -144,16 +142,20 @@ const VisualizarPedido = ({ isOpen, onClose, pedido }) => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-1">
-                    <p className="font-medium">{pedido.cliente.nome}</p>
-                    <p className="text-sm flex items-center text-gray-500">
-                      <Phone className="h-3 w-3 mr-1" />
-                      {pedido.cliente.telefone}
-                    </p>
-                    <p className="text-sm flex items-center text-gray-500">
-                      <Mail className="h-3 w-3 mr-1" />
-                      {pedido.cliente.email}
-                    </p>
-                    {pedido.cliente.endereco && (
+	                    <p className="font-medium">{pedido.cliente?.nome || 'Cliente Não Informado'}</p>
+	                      {pedido.cliente?.telefone && (
+	                        <p className="text-sm flex items-center text-gray-500">
+	                          <Phone className="h-3 w-3 mr-1" />
+	                          {pedido.cliente.telefone}
+	                        </p>
+	                      )}
+	                    {pedido.cliente?.email && (
+	                      <p className="text-sm flex items-center text-gray-500">
+	                        <Mail className="h-3 w-3 mr-1" />
+	                        {pedido.cliente.email}
+	                      </p>
+	                    )}
+	                    {pedido.cliente?.endereco && (
                       <p className="text-sm flex items-center text-gray-500">
                         <MapPin className="h-3 w-3 mr-1" />
                         {pedido.cliente.endereco}
@@ -174,7 +176,7 @@ const VisualizarPedido = ({ isOpen, onClose, pedido }) => {
                   <div className="space-y-1">
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-500">Data:</span>
-                      <span>{formatarData(pedido.data)}</span>
+	                      <span>{formatarData(pedido.criado_em)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-500">Forma de Pagamento:</span>
@@ -215,7 +217,7 @@ const VisualizarPedido = ({ isOpen, onClose, pedido }) => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {pedido.itens.map((item, index) => (
+	                    {(pedido.itens || []).map((item, index) => (
                       <TableRow key={index}>
                         <TableCell className="font-mono">{item.codigo}</TableCell>
                         <TableCell>
@@ -239,24 +241,24 @@ const VisualizarPedido = ({ isOpen, onClose, pedido }) => {
                 {/* Resumo do pedido */}
                 <div className="mt-4 border-t pt-4">
                   <div className="flex justify-between items-center">
-                    <span className="font-medium">Subtotal:</span>
-                    <span>R$ {calcularTotal().toFixed(2)}</span>
+	                      <span className="font-medium">Subtotal:</span>
+	                      <span>R$ {calcularTotal().toFixed(2)}</span>
                   </div>
-                  {pedido.frete > 0 && (
+	                  {(pedido.frete || 0) > 0 && (
                     <div className="flex justify-between items-center">
                       <span className="font-medium">Frete:</span>
                       <span>R$ {pedido.frete.toFixed(2)}</span>
                     </div>
                   )}
-                  {pedido.desconto > 0 && (
+	                  {(pedido.desconto || 0) > 0 && (
                     <div className="flex justify-between items-center">
                       <span className="font-medium">Desconto:</span>
                       <span>- R$ {pedido.desconto.toFixed(2)}</span>
                     </div>
                   )}
                   <div className="flex justify-between items-center font-bold text-lg mt-2 pt-2 border-t">
-                    <span>Total:</span>
-                    <span>R$ {(calcularTotal() + (pedido.frete || 0) - (pedido.desconto || 0)).toFixed(2)}</span>
+	                    <span>Total:</span>
+	                    <span>R$ {(calcularTotal() + (pedido.frete || 0) - (pedido.desconto || 0)).toFixed(2)}</span>
                   </div>
                 </div>
               </CardContent>
