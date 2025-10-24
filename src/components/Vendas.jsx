@@ -100,7 +100,7 @@ const Vendas = () => {
   };
 
   const handleUpdateStatus = (pedidoId, newStatus) => {
-    const venda = vendas.find(v => v.id === pedidoId);
+    const venda = vendas.find(v => String(v.id) === String(pedidoId));
     if (venda) {
       updateVenda(pedidoId, { ...venda, status: newStatus });
     }
