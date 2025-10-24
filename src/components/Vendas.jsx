@@ -53,8 +53,8 @@ const Vendas = () => {
     vendas.filter(venda => {
       const matchesSearch = 
         (venda.id.toString().includes(searchTerm)) ||
-        (venda.cliente?.nome.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (venda.itens?.some(item => item.nome.toLowerCase().includes(searchTerm.toLowerCase())));
+        (venda.cliente?.nome?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (venda.itens?.some(item => item.nome?.toLowerCase().includes(searchTerm.toLowerCase())));
       
       const matchesStatus = selectedStatus === 'all' || venda.status === selectedStatus;
       
@@ -71,7 +71,8 @@ const Vendas = () => {
   };
 
   const calcularTotal = (venda) => {
-    const subtotal = venda.itens.reduce((total, item) => total + (item.quantidade * item.precoUnitario), 0);
+    const itens = venda.itens || [];
+    const subtotal = itens.reduce((total, item) => total + (item.quantidade * item.precoUnitario), 0);
     return subtotal + (venda.frete || 0) - (venda.desconto || 0);
   };
 
