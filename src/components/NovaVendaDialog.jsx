@@ -36,7 +36,7 @@ import {
 } from '@/components/ui/table';
 
 const NovaVendaDialog = ({ isOpen, onOpenChange }) => {
-  const { produtos, clientes, addVenda } = useLocalSync();
+  const { produtos, clientes, vendas, estoque, addVenda } = useLocalSync();
 
   const initialVendaState = {
     clienteId: '',
@@ -51,15 +51,21 @@ const NovaVendaDialog = ({ isOpen, onOpenChange }) => {
   const [produtoSelecionado, setProdutoSelecionado] = useState('');
   const [quantidadeProduto, setQuantidadeProduto] = useState(1);
 
-  const produtoDetalhado = useMemo(() => {
+  const estoqueCalculado = useMemo(() => {
+    // Mapeia o estoque para um objeto de fácil acesso { produto_id: quantidade }
+    const estoqueMap = estoque.reduce((map, item) => {
+      map[item.produto_id] = item.quantidade;
+      return map;
+    }, {});
+
     return produtos.map(p => ({
       ...p,
-      estoque: 0, // Mock para teste, o estoque real viria do contexto
+      estoque: estoqueMap[p.id] || 0, // Pega o estoque real ou 0
     }));
-  }, [produtos]);
+  }, [produtos, estoque]);
 
-  const produtoAtual = produtoDetalhado.find(p => p.id === produtoSelecionado);
-
+  const produtoAtual = estoqueCalculado.find(p => String(p.id) === produtoSelecionado);
+  
   const subtotal = useMemo(() => {
     return novaVenda.itens.reduce((total, item) => total + (item.quantidade * item.precoUnitario), 0);
   }, [novaVenda.itens]);
@@ -218,8 +224,8 @@ const NovaVendaDialog = ({ isOpen, onOpenChange }) => {
                       <SelectValue placeholder="Selecione um produto" />
                     </SelectTrigger>
                     <SelectContent>
-                      {produtoDetalhado.map(produto => (
-                        <SelectItem key={produto.id} value={produto.id}>
+                      {estoqueCalculado.map(produto => (
+                        <SelectItem key={produto.id} value={String(produto.id)}>
                           {produto.nome} (Estoque: {produto.estoque})
                         </SelectItem>
                       ))}
