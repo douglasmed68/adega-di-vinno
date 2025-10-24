@@ -147,14 +147,13 @@ const Estoque = () => {
     e.preventDefault();
     const { codigo_barras, tipo, quantidade, documento, observacoes } = newMovement;
     
-    if (!codigo_barras) {
-      alert('Selecione um produto.');
-      return;
-    }
-    
+    // O Select já garante que codigo_barras (que representa o identificador) não é vazio
     const produto = produtos.find(p => p.codigo_barras === codigo_barras);
+    
+    // Se o produto não for encontrado, significa que o item selecionado não existe mais (erro de estado),
+    // mas o Select deve garantir que um produto válido seja escolhido.
     if (!produto) {
-      alert('Produto não encontrado com o código de barras fornecido.');
+      alert('Erro: Produto selecionado não encontrado no catálogo.');
       return;
     }
 
@@ -302,7 +301,6 @@ const Estoque = () => {
                 <Select 
                   value={newMovement.codigo_barras} 
                   onValueChange={(value) => handleMovementChange('codigo_barras', value)}
-                  required
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione o produto (Nome ou Código)" />

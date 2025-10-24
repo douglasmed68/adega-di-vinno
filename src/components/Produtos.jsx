@@ -85,7 +85,7 @@ const ProductForm = ({ product, setProduct, isEdit = false }) => {
           id="codigo_barras"
           value={product.codigo_barras || ''}
           onChange={(e) => handleInputChange('codigo_barras', e.target.value)}
-          placeholder="Ex: 7891234567890"
+          placeholder="Opcional. Ex: 7891234567890"
         />
       </div>
       <div className="space-y-2">
