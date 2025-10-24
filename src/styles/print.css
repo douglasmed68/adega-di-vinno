@@ -1,0 +1,92 @@
+/* Estilos para impressão */
+@media print {
+  @page {
+    size: A4;
+    margin: 1cm;
+  }
+  
+  body * {
+    visibility: hidden;
+  }
+  
+  .print-content, 
+  .print-content * {
+    visibility: visible;
+  }
+  
+  .print-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+  
+  /* Cores e estilos específicos para impressão */
+  .print-content {
+    color: #000;
+    background: #fff;
+    font-size: 12pt;
+  }
+  
+  .print-content h1 {
+    font-size: 18pt;
+  }
+  
+  .print-content h2 {
+    font-size: 16pt;
+  }
+  
+  .print-content h3 {
+    font-size: 14pt;
+  }
+  
+  .print-content table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .print-content th,
+  .print-content td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .print-content th {
+    font-weight: bold;
+  }
+  
+  /* Quebras de página */
+  .print-page-break {
+    page-break-after: always;
+  }
+  
+  /* Cabeçalho e rodapé */
+  .print-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+  }
+  
+  .print-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    font-size: 10pt;
+    text-align: center;
+  }
+  
+  /* Conteúdo principal */
+  .print-body {
+    margin-top: 2cm;
+    margin-bottom: 2cm;
+  }
+}
