@@ -53,8 +53,10 @@ const VisualizarPedido = ({ isOpen, onClose, pedido }) => {
   }
 
   // Calcular total do pedido
-  const calcularTotal = ()     const itens = pedido.itens || [];
-    const subtotal = itens.reduce((total, item) => total + (item.quantidade * item.precoUnitario), 0)
+  const calcularTotal = () => {
+    const itens = pedido.itens || [];
+    return itens.reduce((total, item) => total + (item.quantidade * item.precoUnitario), 0);
+  }
   // Obter status do pedido com cor
   const getStatusBadge = () => {
     const statusMap = {
