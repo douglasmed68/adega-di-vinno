@@ -57,7 +57,7 @@ const Estoque = () => {
   const [scannerCode, setScannerCode] = useState('');
   
   const [newMovement, setNewMovement] = useState({
-    codigo_barras: '',
+    produto_id: '',
     tipo: 'Entrada',
     quantidade: 0,
     documento: '',
@@ -100,9 +100,10 @@ const Estoque = () => {
 
   const filteredEstoque = useMemo(() => {
     return estoqueDetalhado.filter(item => {
-      const matchesSearch = item.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           item.codigo_barras.includes(searchTerm);
-      
+      const nome = item.nome || '';
+      const codigo_barras = item.codigo_barras || '';
+      const matchesSearch = nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           codigo_barras.includes(searchTerm);
       let matchesFilter = true;
       if (selectedFilter === 'baixo') {
         matchesFilter = item.status === 'BAIXO' || item.status === 'CRÍTICO';
@@ -145,10 +146,14 @@ const Estoque = () => {
 
   const handleMovementSubmit = async (e) => {
     e.preventDefault();
-    const { codigo_barras, tipo, quantidade, documento, observacoes } = newMovement;
-    
-    // O Select já garante que codigo_barras (que representa o identificador) não é vazio
-    const produto = produtos.find(p => p.codigo_barras === codigo_barras);
+    const { produto_id, tipo, quantidade, documento, observacoes } = newMovement;
+
+    if (!produto_id) {
+      alert('Selecione um produto.');
+      return;
+    }
+
+    const produto = produtos.find(p => p.id === produto_id);
     
     // Se o produto não for encontrado, significa que o item selecionado não existe mais (erro de estado),
     // mas o Select deve garantir que um produto válido seja escolhido.
@@ -191,7 +196,7 @@ const Estoque = () => {
 
     // Resetar o formulário
     setNewMovement({
-      codigo_barras: '',
+      produto_id: '',
       tipo: 'Entrada',
       quantidade: 0,
       documento: '',
@@ -299,16 +304,16 @@ const Estoque = () => {
               <div className="space-y-2">
                 <Label htmlFor="produto_id">Produto</Label>
                 <Select 
-                  value={newMovement.codigo_barras} 
-                  onValueChange={(value) => handleMovementChange('codigo_barras', value)}
+                  value={newMovement.produto_id} 
+                  onValueChange={(value) => handleMovementChange('produto_id', value)}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione o produto (Nome ou Código)" />
                   </SelectTrigger>
                   <SelectContent>
                     {produtos.map(p => (
-                      <SelectItem key={p.id} value={p.codigo_barras}>
-                        {p.nome} ({p.codigo_barras})
+                      <SelectItem key={p.id} value={p.id}>
+                        {p.nome} {p.codigo_barras ? `(${p.codigo_barras})` : ''}
                       </SelectItem>
                     ))}
                   </SelectContent>
