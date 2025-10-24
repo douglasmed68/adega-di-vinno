@@ -147,6 +147,11 @@ const Estoque = () => {
     e.preventDefault();
     const { codigo_barras, tipo, quantidade, documento, observacoes } = newMovement;
     
+    if (!codigo_barras) {
+      alert('Selecione um produto.');
+      return;
+    }
+    
     const produto = produtos.find(p => p.codigo_barras === codigo_barras);
     if (!produto) {
       alert('Produto não encontrado com o código de barras fornecido.');
@@ -293,14 +298,23 @@ const Estoque = () => {
           <form onSubmit={handleMovementSubmit}>
             <div className="grid gap-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="codigo_barras">Código de Barras</Label>
-                <Input 
-                  id="codigo_barras" 
+                <Label htmlFor="produto_id">Produto</Label>
+                <Select 
                   value={newMovement.codigo_barras} 
-                  onChange={(e) => handleMovementChange('codigo_barras', e.target.value)} 
-                  placeholder="EAN-13 do produto" 
+                  onValueChange={(value) => handleMovementChange('codigo_barras', value)}
                   required
-                />
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o produto (Nome ou Código)" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {produtos.map(p => (
+                      <SelectItem key={p.id} value={p.codigo_barras}>
+                        {p.nome} ({p.codigo_barras})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="tipo">Tipo de Movimentação</Label>

@@ -114,6 +114,54 @@ const ProductForm = ({ product, setProduct, isEdit = false }) => {
           placeholder="0.00"
         />
       </div>
+      <div className="space-y-2">
+        <Label htmlFor="regiao">Região/País</Label>
+        <Input
+          id="regiao"
+          value={product.regiao || ''}
+          onChange={(e) => handleInputChange('regiao', e.target.value)}
+          placeholder="Ex: Chile, Argentina, Brasil"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="safra">Safra</Label>
+        <Input
+          id="safra"
+          value={product.safra || ''}
+          onChange={(e) => handleInputChange('safra', e.target.value)}
+          placeholder="Ex: 2020"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="teorAlcoolico">Teor Alcoólico</Label>
+        <Input
+          id="teorAlcoolico"
+          value={product.teorAlcoolico || ''}
+          onChange={(e) => handleInputChange('teorAlcoolico', e.target.value)}
+          placeholder="Ex: 13.5%"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="preco_custo">Preço de Custo (R$)</Label>
+        <Input
+          id="preco_custo"
+          type="number"
+          step="0.01"
+          value={product.preco_custo || ''}
+          onChange={(e) => handleInputChange('preco_custo', parseFloat(e.target.value) || 0)}
+          placeholder="0.00"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="estoqueMin">Estoque Mínimo</Label>
+        <Input
+          id="estoqueMin"
+          type="number"
+          value={product.estoqueMin || ''}
+          onChange={(e) => handleInputChange('estoqueMin', parseInt(e.target.value) || 0)}
+          placeholder="10"
+        />
+      </div>
       {/* Adicione mais campos conforme necessário */}
     </div>
   );
@@ -131,6 +179,11 @@ const Produtos = () => {
     codigo_barras: '',
     tipo: '',
     preco_venda: 0,
+    regiao: '',
+    safra: '',
+    teorAlcoolico: '',
+    preco_custo: 0,
+    estoqueMin: 0,
     // Adicione outros campos aqui
   }), []);
 
