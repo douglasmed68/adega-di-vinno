@@ -153,7 +153,7 @@ const Estoque = () => {
       return;
     }
 
-    const produto = produtos.find(p => p.id === produto_id);
+    const produto = produtos.find(p => p.id === produto_id || String(p.id) === produto_id);
     
     // Se o produto não for encontrado, significa que o item selecionado não existe mais (erro de estado),
     // mas o Select deve garantir que um produto válido seja escolhido.
