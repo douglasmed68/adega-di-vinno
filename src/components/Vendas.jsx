@@ -29,6 +29,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator, // Importação adicionada
+  DropdownMenuLabel, // Importação adicionada (também estava faltando, linha 194)
 } from '@/components/ui/dropdown-menu';
 import {
   Select,
