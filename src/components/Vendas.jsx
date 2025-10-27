@@ -42,24 +42,25 @@ import NovaVendaDialog from './NovaVendaDialog'; // Importar o novo componente
 import SyncStatus from './SyncStatus';
 
 const Vendas = () => {
-  const { produtos, clientes, vendas, addVenda, updateVenda, deleteVenda, syncStatus } = useLocalSync(); // Adicionar produtos e clientes
+	  const { produtos, clientes, vendas: allVendas, addVenda, updateVenda, deleteVenda, syncStatus } = useLocalSync(); // Adicionar produtos e clientes
   const [searchTerm, setSearchTerm] = useState('');
   const [isNewVendaDialogOpen, setIsNewVendaDialogOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('all');
-  const [selectedPedido, setSelectedPedido] = useState(null);
+	  const [selectedPedido, setSelectedPedido] = useState(null);
+	  const vendas = allVendas || []; // Garantir que vendas é um array mesmo que useLocalSync retorne null/undefined
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
 
-  const filteredVendas = useMemo(() => 
-    vendas.filter(venda => {
+	  const filteredVendas = useMemo(() => 
+	    vendas.filter(venda => {
       const matchesSearch = 
-        (venda.id.toString().includes(searchTerm)) ||
+        (venda.id?.toString().includes(searchTerm)) ||
         (venda.cliente?.nome?.toLowerCase().includes(searchTerm.toLowerCase())) ||
         (venda.itens?.some(item => item.nome?.toLowerCase().includes(searchTerm.toLowerCase())));
       
-      const matchesStatus = selectedStatus === 'all' || venda.status === selectedStatus;
+      const matchesStatus = selectedStatus === 'all' || (venda.status && venda.status === selectedStatus);
       
       return matchesSearch && matchesStatus;
-    }), [vendas, searchTerm, selectedStatus]);
+	    }), [vendas, searchTerm, selectedStatus]);
 
   const formatarData = (timestamp) => {
     const data = new Date(timestamp);
@@ -85,7 +86,7 @@ const Vendas = () => {
       'cancelado': { label: 'Cancelado', variant: 'destructive', icon: <AlertTriangle className="h-4 w-4" /> }
     };
 
-    const statusInfo = statusMap[status] || statusMap.pendente;
+    const statusInfo = statusMap[status] || statusMap['pendente'];
 
     return (
       <Badge variant={statusInfo.variant} className="flex items-center gap-1">

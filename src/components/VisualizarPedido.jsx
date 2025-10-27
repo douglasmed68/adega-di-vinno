@@ -52,10 +52,16 @@ const VisualizarPedido = ({ isOpen, onClose, pedido }) => {
     })
   }
 
-  // Calcular total do pedido
-  const calcularTotal = () => {
+  // Calcular total do pedido (apenas subtotal)
+  const calcularSubtotal = () => {
     const itens = pedido.itens || [];
     return itens.reduce((total, item) => total + (item.quantidade * item.precoUnitario), 0);
+  }
+
+  // Calcular total final
+  const calcularTotal = () => {
+    const subtotal = calcularSubtotal();
+    return subtotal + (pedido.frete || 0) - (pedido.desconto || 0);
   }
   // Obter status do pedido com cor
   const getStatusBadge = () => {
@@ -113,7 +119,7 @@ const VisualizarPedido = ({ isOpen, onClose, pedido }) => {
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center justify-between">
-              <span>Pedido #{pedido.numero}</span>
+              <span>Pedido #{pedido.id || 'N/A'}</span>
               {getStatusBadge()}
             </DialogTitle>
           </DialogHeader>
@@ -244,7 +250,7 @@ const VisualizarPedido = ({ isOpen, onClose, pedido }) => {
                 <div className="mt-4 border-t pt-4">
                   <div className="flex justify-between items-center">
 	                      <span className="font-medium">Subtotal:</span>
-	                      <span>R$ {calcularTotal().toFixed(2)}</span>
+		                      <span>R$ {calcularSubtotal().toFixed(2)}</span>
                   </div>
 	                  {(pedido.frete || 0) > 0 && (
                     <div className="flex justify-between items-center">
@@ -258,10 +264,10 @@ const VisualizarPedido = ({ isOpen, onClose, pedido }) => {
                       <span>- R$ {pedido.desconto.toFixed(2)}</span>
                     </div>
                   )}
-                  <div className="flex justify-between items-center font-bold text-lg mt-2 pt-2 border-t">
-	                    <span>Total:</span>
-	                    <span>R$ {(calcularTotal() + (pedido.frete || 0) - (pedido.desconto || 0)).toFixed(2)}</span>
-                  </div>
+	                  <div className="flex justify-between items-center font-bold text-lg mt-2 pt-2 border-t">
+		                    <span>Total:</span>
+		                    <span>R$ {calcularTotal().toFixed(2)}</span>
+	                  </div>
                 </div>
               </CardContent>
             </Card>

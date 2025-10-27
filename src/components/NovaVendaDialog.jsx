@@ -53,12 +53,12 @@ const NovaVendaDialog = ({ isOpen, onOpenChange }) => {
 
   const estoqueCalculado = useMemo(() => {
     // Mapeia o estoque para um objeto de fácil acesso { produto_id: quantidade }
-    const estoqueMap = estoque.reduce((map, item) => {
+    const estoqueMap = (estoque || []).reduce((map, item) => {
       map[item.produto_id] = item.quantidade;
       return map;
     }, {});
 
-    return produtos.map(p => ({
+    return (produtos || []).map(p => ({
       ...p,
       estoque: estoqueMap[p.id] || 0, // Pega o estoque real ou 0
     }));
