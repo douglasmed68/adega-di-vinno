@@ -78,25 +78,26 @@ const NovaVendaDialog = ({ isOpen, onOpenChange }) => {
     if (produtoAtual && quantidadeProduto > 0) {
       const itemExistente = novaVenda.itens.find(item => item.produtoId === produtoAtual.id);
 
-      if (itemExistente) {
-        setNovaVenda(prev => ({
-          ...prev,
-          itens: prev.itens.map(item =>
-            item.produtoId === produtoAtual.id
-              ? { ...item, quantidade: item.quantidade + quantidadeProduto }
-              : item
-          ),
-        }));
-      } else {
+	      // Se o item já existe, atualiza a quantidade (soma)
+	      if (itemExistente) {
+	        setNovaVenda(prev => ({
+	          ...prev,
+	          itens: prev.itens.map(item =>
+	            item.produtoId === produtoAtual.id
+	              ? { ...item, quantidade: item.quantidade + quantidadeProduto }
+	              : item
+	          ),
+	        }));
+	      } else {
         setNovaVenda(prev => ({
           ...prev,
           itens: [
             ...prev.itens,
             {
-              produtoId: produtoAtual.id,
-              nome: produtoAtual.nome,
-              precoUnitario: produtoAtual.preco_venda,
-              quantidade: quantidadeProduto,
+	              produtoId: produtoAtual.id,
+	              nome: produtoAtual.nome,
+	              precoUnitario: produtoAtual.preco_venda,
+	              quantidade: quantidadeProduto,
             },
           ],
         }));
@@ -107,12 +108,29 @@ const NovaVendaDialog = ({ isOpen, onOpenChange }) => {
     }
   }, [produtoAtual, quantidadeProduto, novaVenda.itens]);
 
-  const handleRemoveItem = useCallback((produtoId) => {
-    setNovaVenda(prev => ({
-      ...prev,
-      itens: prev.itens.filter(item => item.produtoId !== produtoId),
-    }));
-  }, []);
+	  const handleRemoveItem = useCallback((produtoId) => {
+	    setNovaVenda(prev => ({
+	      ...prev,
+	      itens: prev.itens.filter(item => item.produtoId !== produtoId),
+	    }));
+	  }, []);
+	
+	  const handleUpdateItemQuantity = useCallback((produtoId, newQuantity) => {
+	    const quantity = parseInt(newQuantity) || 0;
+	    if (quantity <= 0) {
+	      handleRemoveItem(produtoId);
+	      return;
+	    }
+	
+	    setNovaVenda(prev => ({
+	      ...prev,
+	      itens: prev.itens.map(item =>
+	        item.produtoId === produtoId
+	          ? { ...item, quantidade: quantity }
+	          : item
+	      ),
+	    }));
+	  }, [handleRemoveItem]);
 
   const handleInputChange = useCallback((field, value) => {
     setNovaVenda(prev => ({
@@ -239,7 +257,7 @@ const NovaVendaDialog = ({ isOpen, onOpenChange }) => {
                     type="number" 
                     min="1"
                     value={quantidadeProduto} 
-                    onChange={(e) => setQuantidadeProduto(parseInt(e.target.value) || 1)} 
+                    onChange={(e) => setQuantidadeProduto(parseInt(e.target.value) || 0)} 
                   />
                 </div>
                 <div className="flex items-end">
@@ -268,8 +286,16 @@ const NovaVendaDialog = ({ isOpen, onOpenChange }) => {
                   <TableBody>
                     {novaVenda.itens.map(item => (
                       <TableRow key={item.produtoId}>
-                        <TableCell className="font-medium">{item.nome}</TableCell>
-                        <TableCell className="text-right">{item.quantidade}</TableCell>
+	                        <TableCell className="font-medium">{item.nome}</TableCell>
+	                        <TableCell className="text-right">
+	                          <Input 
+	                            type="number"
+	                            min="1"
+	                            className="w-16 text-right p-1 h-8"
+	                            value={item.quantidade}
+	                            onChange={(e) => handleUpdateItemQuantity(item.produtoId, e.target.value)}
+	                          />
+	                        </TableCell>
                         <TableCell className="text-right">R$ {item.precoUnitario.toFixed(2)}</TableCell>
                         <TableCell className="text-right">R$ {(item.quantidade * item.precoUnitario).toFixed(2)}</TableCell>
                         <TableCell>
