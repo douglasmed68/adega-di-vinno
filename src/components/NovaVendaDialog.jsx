@@ -250,7 +250,7 @@ const NovaVendaDialog = ({ isOpen, onOpenChange }) => {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="space-y-2 w-24">
+                <div className="space-y-2 w-20">
                   <Label htmlFor="quantidade">Qtd</Label>
                   <Input 
                     id="quantidade" 
@@ -260,7 +260,7 @@ const NovaVendaDialog = ({ isOpen, onOpenChange }) => {
                     onChange={(e) => setQuantidadeProduto(parseInt(e.target.value) || 0)} 
                   />
                 </div>
-                <div className="flex items-end">
+                <div className="flex items-end flex-shrink-0">
                   <Button 
                     type="button" 
                     onClick={handleAddItem} 
