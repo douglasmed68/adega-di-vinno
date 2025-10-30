@@ -5,7 +5,7 @@ import './App.css';
 import './styles/print.css';
 
 // Contexto de Sincronização Local
-import { LocalSyncProvider } from './services/localSyncService.jsx';
+import { SupabaseSyncProvider } from './services/supabaseSyncService.jsx';
 
 // Componentes
 import Sidebar from './components/Sidebar';
@@ -80,7 +80,7 @@ function App() {
   }
 
   return (
-    <LocalSyncProvider>
+    <SupabaseSyncProvider>
       <Router>
         <div className="flex h-screen bg-background text-foreground">
           <AnimatePresence>
@@ -142,7 +142,7 @@ function App() {
           )}
         </div>
       </Router>
-    </LocalSyncProvider>
+    </SupabaseSyncProvider>
   );
 }
 
