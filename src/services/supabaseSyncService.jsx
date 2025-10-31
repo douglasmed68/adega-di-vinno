@@ -142,7 +142,7 @@ export function SupabaseSyncProvider({ children }) {
       const setter = setters[tableName];
 
       return supabase
-        .channel(\`public:\${tableName}\`)
+        .channel('public:' + tableName)
         .on('postgres_changes', { event: '*', schema: 'public', table: tableName }, (payload) => {
           setSyncStatus('syncing');
           // Dependendo do evento, atualizamos o estado de forma otimista ou recarregamos
