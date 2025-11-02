@@ -155,7 +155,15 @@ export function SupabaseSyncProvider({ children }) {
           }
           setSyncStatus('synced');
         })
-        .subscribe();
+        .subscribe((status) => {
+              console.log(`[REALTIME] ${tableName} status:`, status);
+              if (status === 'SUBSCRIBED') {
+                setSyncStatus('synced');
+              } else if (status === 'CHANNEL_ERROR') {
+                setSyncStatus('error');
+                console.error(`[REALTIME] Erro no canal ${tableName}`);
+              }
+            });
     });
 
     return () => {
