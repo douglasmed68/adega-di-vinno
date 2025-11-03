@@ -7,13 +7,15 @@ console.log("KEY:", import.meta.env.VITE_SUPABASE_ANON_KEY ? "Carregada" : "Usan
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://qrpgfcqsswnglkmqdmuv.supabase.co';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFycGdmY3Fzc3duZ2xrbXFkbXV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEyNzA3OTMsImV4cCI6MjA3Njg0Njc5M30.xFtbf2GzKF9dIuRCCZYukA0dHg7LpWbjrjXryhUrA7s';
 
+let supabaseClient;
+
 try {
-  export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
   console.log("[SUPABASE] Cliente Supabase inicializado com sucesso.");
 } catch (e) {
   console.error("[SUPABASE] ERRO CRÍTICO na inicialização do cliente Supabase:", e);
-  // Exporta um objeto mock para evitar que o aplicativo trave em caso de falha
-  export const supabase = {
+  // Atribui um objeto mock para evitar que o aplicativo trave em caso de falha
+  supabaseClient = {
     from: () => ({
       select: () => ({ data: [], error: { message: "Supabase client failed to initialize." } }),
       insert: () => ({ data: [], error: { message: "Supabase client failed to initialize." } }),
@@ -27,4 +29,6 @@ try {
     removeChannel: () => {},
   };
 }
+
+export const supabase = supabaseClient;
 
