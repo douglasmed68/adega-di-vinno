@@ -144,7 +144,6 @@ export function SupabaseSyncProvider({ children }) {
       return supabase
         .channel('public:' + tableName)
         .on('postgres_changes', { event: '*', schema: 'public', table: tableName }, (payload) => {
-          console.log(`[REALTIME] Payload recebido para ${tableName}:`, payload);
           setSyncStatus('syncing');
           // Dependendo do evento, atualizamos o estado de forma otimista ou recarregamos
           if (payload.eventType === 'INSERT') {
@@ -157,10 +156,6 @@ export function SupabaseSyncProvider({ children }) {
           setSyncStatus('synced');
         })
         .subscribe((status) => {
-              console.log(`[REALTIME] ${tableName} status:`, status);
-              if (status === 'SUBSCRIBED') {
-                console.log(`[REALTIME] Canal ${tableName} subscrito com sucesso.`);
-              }
               if (status === 'SUBSCRIBED') {
                 setSyncStatus('synced');
               } else if (status === 'CHANNEL_ERROR') {
